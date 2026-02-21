@@ -14,7 +14,7 @@ const GREY_LIGHT = '#ECF0F1';
 
 app.get('/pages/:page', (req, res) => {
   const page = req.params.page;
-  console.log('Requested page:', page);
+  // console.log('Requested page:', page);
   const allowedPages = ['billing-generator', 'voucher-generator'];
 
   if (page.includes('.')) {
