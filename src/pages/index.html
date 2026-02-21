@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="lofi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Modak&family=Potta+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/custom/global.css">
+    <link rel="stylesheet" href="../css/custom/index.css">
+
+    <title>Invoice System</title>
+</head>
+<body class="w-full h-screen bg-base-300 flex items-center justify-center inter ">
+    <form class="fieldset bg-base-100 border-base-200 w-xs border px-4 py-8 login-form shadow gap-1">
+        <h1 class="font-bold text-3xl tracking-tighter">Login</h1>
+        <fieldset class="fieldset gap-1">
+            <label class="label" for="login-username">Username</label>
+            <input type="text" class="input validator text-xs" placeholder="Username" id="login-username" required />
+            <p class="validator-hint hidden mt-0 text-[10px]">Required</p>
+        </fieldset>
+    
+        <label class="fieldset gap-1">
+            <span class="label" for="login-password">Password</span>
+            <input type="password" class="input validator text-xs" placeholder="Password" id="login-password" required />
+            <span class="validator-hint hidden mt-0 text-[10px]">Required</span>
+        </label>
+
+        
+    
+        <button class="btn btn-primary mt-4 text-xs" id="login-btn" popovertarget="loading-modal" disabled>Login</button>
+        
+    </form>
+    <div class="w-screen h-screen bg-base-300/70 " id="loading-modal" popover>
+        <div class="w-full h-full flex items-center justify-center">
+            <div class="w-[100px] aspect-video bg-base-100 rounded flex items-center justify-center flex-col">
+                <span class="loading loading-infinity loading-md"></span>
+                
+            </div>
+        </div>
+    </div>
+    <script src="../js/index-front-end.js"></script>
+</body>
+</html>
+
+
+
+

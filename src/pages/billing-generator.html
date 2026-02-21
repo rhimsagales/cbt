@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="lofi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <title>Billing Generator</title>
+</head>
+<body class="min-h-screen bg-base-300 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <div class="w-full max-w-2xl flex-shrink-0">
+        <!-- Navigation Header -->
+        <nav class="flex gap-1 mb-3">
+            <a href="billing-generator.html" class="btn btn-sm btn-primary">Billing</a>
+            <a href="voucher-generator.html" class="btn btn-sm btn-ghost">Voucher</a>
+        </nav>
+
+        <!-- Main Form Card -->
+        <div class="card bg-base-100 shadow-lg p-4 sm:p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-xl sm:text-2xl font-semibold">Billing Generator</h1>
+                <span class="badge badge-ghost badge-sm">Step <span id="current-step">1</span> of 3</span>
+            </div>
+
+            <form id="billing-form" class="space-y-6 w-full">
+                <!-- Page 1: Client Information -->
+                <div id="page-1" class="form-page">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Client Information</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Name</span>
+                                    </label>
+                                    <input type="text" name="name" placeholder="Enter name" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Customer Attention</span>
+                                    </label>
+                                    <input type="text" name="customerAttention" placeholder="Enter customer attention" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Voucher No.</span>
+                                    </label>
+                                    <input type="text" name="voucherNo" placeholder="Enter voucher number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Date of Issue</span>
+                                    </label>
+                                    <input type="date" name="dateOfIssue" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">TIN Number</span>
+                                    </label>
+                                    <input type="text" name="tinNumber" placeholder="Enter TIN number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Deadline of Payment</span>
+                                    </label>
+                                    <input type="date" name="deadlineOfPayment" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control sm:col-span-2">
+                                    <label class="label py-0.5">
+                                        <span class="label-text text-xs font-medium">Payment Method</span>
+                                    </label>
+                                    <select name="paymentMethod" class="select select-sm select-bordered w-full rounded-md text-sm">
+                                        <option selected>Full Payment</option>
+                                        <option>Partial Payment</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2: Item Description -->
+                <div id="page-2" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Item Description</h2>
+                            <div class="space-y-4" id="items-container">
+                                <!-- Item 1 Subsection -->
+                                <div class="item-block border border-base-300/60 rounded-md p-3">
+                                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Item 1</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                        <div class="form-control sm:col-span-2 lg:col-span-2">
+                                            <label class="label py-0.5">
+                                                <span class="label-text text-xs font-medium">Item</span>
+                                            </label>
+                                            <input type="text" name="item" placeholder="Enter item description" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5">
+                                                <span class="label-text text-xs font-medium">Quantity</span>
+                                            </label>
+                                            <input type="number" name="quantity" min="1" value="1" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5">
+                                                <span class="label-text text-xs font-medium">Price</span>
+                                            </label>
+                                            <input type="number" name="price" step="0.01" value="0" min="0" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control sm:col-span-2 lg:col-span-1">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Currency</span></label>
+                                            <select name="currency" class="select select-sm select-bordered w-full rounded-md text-sm">
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="GBP">GBP</option>
+                                                <option value="NGN">NGN</option>
+                                                <option value="PHP" selected>PHP</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-item-btn" class="btn btn-primary btn-sm mt-3">Add Item</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 3: Bank Details -->
+                <div id="page-3" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Bank Details</h2>
+                            <div class="form-control">
+                                <label class="label py-0.5">
+                                    <span class="label-text text-xs font-medium">Description</span>
+                                </label>
+                                <textarea name="bankDetails" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]" placeholder="Enter bank details or additional notes..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex flex-col-reverse sm:flex-row gap-3 mt-6 justify-between">
+                    <button type="button" id="back-btn" class="btn btn-ghost btn-sm gap-1.5 order-2 sm:order-1 w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back
+                    </button>
+                    <button type="button" id="next-btn" class="btn btn-primary btn-sm gap-1.5 order-1 sm:order-2 w-full sm:w-auto">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary btn-sm w-full sm:w-auto order-1 sm:order-2 hidden">
+                        Generate Billing
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const BILLING_API_ENDPOINT = '/api/billing';
+
+            let currentPage = 1;
+            const totalPages = 3;
+            let itemCount = 1;
+
+            const pages = [
+                document.getElementById('page-1'),
+                document.getElementById('page-2'),
+                document.getElementById('page-3')
+            ];
+            const backBtn = document.getElementById('back-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const currentStepEl = document.getElementById('current-step');
+            const addItemBtn = document.getElementById('add-item-btn');
+            const itemsContainer = document.getElementById('items-container');
+
+            function showPage(pageNum) {
+                currentPage = pageNum;
+                pages.forEach((page, i) => {
+                    page.classList.toggle('hidden', i + 1 !== pageNum);
+                });
+                currentStepEl.textContent = pageNum;
+
+                // Back button: on page 1 go to browser history, else previous form page
+                backBtn.classList.remove('hidden');
+                backBtn.onclick = pageNum === 1 ? () => history.back() : goBack;
+
+                // Next vs Submit
+                nextBtn.classList.toggle('hidden', pageNum === totalPages);
+                submitBtn.classList.toggle('hidden', pageNum !== totalPages);
+            }
+
+            function goBack() {
+                if (currentPage > 1) showPage(currentPage - 1);
+            }
+
+            function goNext() {
+                if (currentPage < totalPages) showPage(currentPage + 1);
+            }
+
+            backBtn.onclick = () => history.back();
+            nextBtn.onclick = goNext;
+
+            addItemBtn.onclick = function() {
+                itemCount++;
+                const block = document.createElement('div');
+                block.className = 'item-block border border-base-300/60 rounded-md p-3';
+                block.innerHTML = `
+                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Item ${itemCount}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="form-control sm:col-span-2 lg:col-span-2">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Item</span></label>
+                            <input type="text" name="item" placeholder="Enter item description" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Quantity</span></label>
+                            <input type="number" name="quantity" min="1" value="1" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Price</span></label>
+                            <input type="number" name="price" step="0.01" value="0" min="0" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control sm:col-span-2 lg:col-span-1">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Currency</span></label>
+                            <select name="currency" class="select select-sm select-bordered w-full rounded-md text-sm">
+                                <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="NGN">NGN</option>
+                                    <option value="PHP" selected>PHP</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(block);
+            };
+
+            function extractFormData() {
+                const form = document.getElementById('billing-form');
+
+                const clientInfo = {
+                    name: form.querySelector('[name="name"]').value.trim(),
+                    customerAttention: form.querySelector('[name="customerAttention"]').value.trim(),
+                    voucherNo: form.querySelector('[name="voucherNo"]').value.trim(),
+                    dateOfIssue: form.querySelector('[name="dateOfIssue"]').value,
+                    tinNumber: form.querySelector('[name="tinNumber"]').value.trim(),
+                    deadlineOfPayment: form.querySelector('[name="deadlineOfPayment"]').value,
+                    paymentMethod: form.querySelector('[name="paymentMethod"]').value
+                };
+
+                const itemBlocks = itemsContainer.querySelectorAll('.item-block');
+                const items = Array.from(itemBlocks).map(block => {
+                    const itemInput = block.querySelector('[name="item"]');
+                    const quantityInput = block.querySelector('[name="quantity"]');
+                    const priceInput = block.querySelector('[name="price"]');
+                    const currencySelect = block.querySelector('[name="currency"]');
+                    return {
+                        item: itemInput ? itemInput.value.trim() : '',
+                        quantity: quantityInput ? parseInt(quantityInput.value, 10) || 0 : 0,
+                        price: priceInput ? parseFloat(priceInput.value) || 0 : 0,
+                        currency: currencySelect ? currencySelect.value : 'USD'
+                    };
+                });
+
+                const bankDetails = form.querySelector('[name="bankDetails"]').value.trim();
+
+                return {
+                    clientInfo,
+                    items,
+                    bankDetails
+                };
+            }
+
+            document.getElementById('billing-form').onsubmit = async function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submit-btn');
+                const originalText = submitBtn.textContent;
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Generating...';
+
+                    const payload = extractFormData();
+
+                    const response = await fetch(BILLING_API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.error || `Request failed: ${response.status} ${response.statusText}`);
+                    }
+
+                    const blob = await response.blob();
+                    const contentDisposition = response.headers.get('Content-Disposition');
+                    const filenameMatch = contentDisposition && contentDisposition.match(/filename="?([^";\n]+)"?/);
+                    const filename = filenameMatch ? filenameMatch[1] : `invoice-${payload.clientInfo.voucherNo || Date.now()}.pdf`;
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    alert('Invoice PDF downloaded successfully!');
+                } catch (err) {
+                    console.error('Billing submission error:', err);
+                    alert(`Failed to generate billing: ${err.message}`);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            };
+
+            // Set default dates
+            const today = new Date().toISOString().slice(0, 10);
+            const in30Days = new Date();
+            in30Days.setDate(in30Days.getDate() + 30);
+            document.querySelector('[name="dateOfIssue"]').value = today;
+            document.querySelector('[name="deadlineOfPayment"]').value = in30Days.toISOString().slice(0, 10);
+
+            showPage(1);
+        })();
+    </script>
+</body>
+</html>

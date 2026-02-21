@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="lofi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <title>Voucher Generator</title>
+</head>
+<body class="min-h-screen bg-base-300 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <div class="w-full max-w-2xl flex-shrink-0">
+        <nav class="flex gap-1 mb-3">
+            <a href="billing-generator.html" class="btn btn-sm btn-ghost">Billing</a>
+            <a href="voucher-generator.html" class="btn btn-sm btn-primary">Voucher</a>
+        </nav>
+
+        <div class="card bg-base-100 shadow-lg p-4 sm:p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-xl sm:text-2xl font-semibold">Voucher Generator</h1>
+                <span class="badge badge-ghost badge-sm">Step <span id="current-step">1</span> of 5</span>
+            </div>
+
+            <form id="voucher-form" class="space-y-6 w-full">
+                <!-- Page 1: Voucher Information -->
+                <div id="page-1" class="form-page">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Voucher Information</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Name</span></label>
+                                    <input type="text" name="name" placeholder="Enter name" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Voucher No.</span></label>
+                                    <input type="text" name="voucherNo" placeholder="Enter voucher number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Date of Issue</span></label>
+                                    <input type="date" name="dateOfIssue" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Destination</span></label>
+                                    <input type="text" name="destination" placeholder="Enter destination" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Date of Travel</span></label>
+                                    <input type="date" name="dateOfTravel" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Hotel</span></label>
+                                    <input type="text" name="hotel" placeholder="Hotel name" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Hotel Confirmation No.</span></label>
+                                    <input type="text" name="hotelConfirmation" placeholder="Confirmation number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control sm:col-span-2">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Hotel Address</span></label>
+                                    <input type="text" name="hotelAddress" placeholder="Hotel address" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Rooms</span></label>
+                                    <input type="number" name="rooms" min="1" value="1" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                </div>
+                                <div class="form-control sm:col-span-2">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Names List</span></label>
+                                    <textarea name="namesList" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]" placeholder="Names of Passengers"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2: Flight Details -->
+                <div id="page-2" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Flight Details</h2>
+                            <div id="flights-container" class="space-y-4">
+                                <div class="flight-block border border-base-300/60 rounded-md p-3">
+                                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Flight 1</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Flight No.</span></label>
+                                            <input type="text" name="flightNo" placeholder="Flight number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Departure Date</span></label>
+                                            <input type="date" name="depDate" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Departure Time</span></label>
+                                            <input type="time" name="depTime" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Arrival Date</span></label>
+                                            <input type="date" name="arrDate" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Arrival Time</span></label>
+                                            <input type="time" name="arrTime" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-flight-btn" class="btn btn-primary btn-sm mt-3">Add Flight</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 3: Day 1 - Itinerary -->
+                <div id="page-3" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <div id="itineraries-container" class="space-y-4">
+                                <div class="itinerary-block border border-base-300/60 rounded-md p-3">
+                                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Day 1</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">City</span></label>
+                                            <input type="text" name="city" placeholder="City" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Hotel</span></label>
+                                            <input type="text" name="itHotel" placeholder="Hotel" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Breakfast</span></label>
+                                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="breakfast" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Lunch</span></label>
+                                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="lunch" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                                        </div>
+                                        <div class="form-control">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Dinner</span></label>
+                                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="dinner" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                                        </div>
+                                        <div class="form-control sm:col-span-2">
+                                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Description</span></label>
+                                            <textarea name="itDesc" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]" placeholder="Description..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-itinerary-btn" class="btn btn-primary btn-sm mt-3">Add Itinerary</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 4: Scope of Work -->
+                <div id="page-4" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Scope of Work</h2>
+                            <div class="space-y-4">
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Inclusions</span></label>
+                                    <textarea name="inclusions" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]"></textarea>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Exclusions</span></label>
+                                    <textarea name="exclusions" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]"></textarea>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Arrival Instructions</span></label>
+                                    <textarea name="arrivalInstructions" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]"></textarea>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label py-0.5"><span class="label-text text-xs font-medium">Remarks</span></label>
+                                    <textarea name="remarks" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 5: Action -->
+                <div id="page-5" class="form-page hidden">
+                    <div class="card bg-base-200/50 shadow-sm">
+                        <div class="card-body p-4 sm:p-5">
+                            <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/70 mb-3">Action</h2>
+                            <div class="space-y-4">
+                                <p class="text-sm text-base-content/70">When you click <strong>Generate Voucher</strong>, the form will be sent to the server to create a printable voucher (PDF).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col-reverse sm:flex-row gap-3 mt-6 justify-between">
+                    <button type="button" id="back-btn" class="btn btn-ghost btn-sm gap-1.5 order-2 sm:order-1 w-full sm:w-auto">Back</button>
+                    <button type="button" id="next-btn" class="btn btn-primary btn-sm gap-1.5 order-1 sm:order-2 w-full sm:w-auto">Next</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary btn-sm w-full sm:w-auto order-1 sm:order-2 hidden">Generate Voucher</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const VOUCHER_API_ENDPOINT = '/api/voucher';
+
+            let currentPage = 1;
+            const totalPages = 5;
+            let flightCount = 1;
+            let itineraryCount = 1;
+
+            const pages = [
+                document.getElementById('page-1'),
+                document.getElementById('page-2'),
+                document.getElementById('page-3'),
+                document.getElementById('page-4'),
+                document.getElementById('page-5')
+            ];
+            const backBtn = document.getElementById('back-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const currentStepEl = document.getElementById('current-step');
+            const addFlightBtn = document.getElementById('add-flight-btn');
+            const flightsContainer = document.getElementById('flights-container');
+            const addItineraryBtn = document.getElementById('add-itinerary-btn');
+            const itinerariesContainer = document.getElementById('itineraries-container');
+
+            function showPage(pageNum) {
+                currentPage = pageNum;
+                pages.forEach((page, i) => page.classList.toggle('hidden', i + 1 !== pageNum));
+                currentStepEl.textContent = pageNum;
+
+                backBtn.onclick = pageNum === 1 ? () => history.back() : goBack;
+                nextBtn.classList.toggle('hidden', pageNum === totalPages);
+                submitBtn.classList.toggle('hidden', pageNum !== totalPages);
+            }
+
+            function goBack() { if (currentPage > 1) showPage(currentPage - 1); }
+            function goNext() { if (currentPage < totalPages) showPage(currentPage + 1); }
+            nextBtn.onclick = goNext;
+
+            addFlightBtn.onclick = function() {
+                flightCount++;
+                const block = document.createElement('div');
+                block.className = 'flight-block border border-base-300/60 rounded-md p-3';
+                block.innerHTML = `
+                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Flight ${flightCount}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Flight No.</span></label>
+                            <input type="text" name="flightNo" placeholder="Flight number" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Departure Date</span></label>
+                            <input type="date" name="depDate" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Departure Time</span></label>
+                            <input type="time" name="depTime" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Arrival Date</span></label>
+                            <input type="date" name="arrDate" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Arrival Time</span></label>
+                            <input type="time" name="arrTime" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                    </div>
+                `;
+                flightsContainer.appendChild(block);
+            };
+
+            addItineraryBtn.onclick = function() {
+                itineraryCount++;
+                const block = document.createElement('div');
+                block.className = 'itinerary-block border border-base-300/60 rounded-md p-3';
+                block.innerHTML = `
+                    <h3 class="text-xs font-semibold text-base-content/80 mb-3">Day ${itineraryCount}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">City</span></label>
+                            <input type="text" name="city" placeholder="City" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Hotel</span></label>
+                            <input type="text" name="itHotel" placeholder="Hotel" class="input input-sm input-bordered w-full rounded-md text-sm" />
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Breakfast</span></label>
+                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="breakfast" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Lunch</span></label>
+                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="lunch" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Dinner</span></label>
+                            <label class="cursor-pointer items-center flex gap-2"><input type="checkbox" name="dinner" class="checkbox" /> <span class="text-sm">Yes</span></label>
+                        </div>
+                        <div class="form-control sm:col-span-2">
+                            <label class="label py-0.5"><span class="label-text text-xs font-medium">Description</span></label>
+                            <textarea name="itDesc" class="textarea textarea-sm textarea-bordered w-full rounded-md text-sm min-h-[80px]"></textarea>
+                        </div>
+                    </div>
+                `;
+                itinerariesContainer.appendChild(block);
+            };
+
+            function extractFormData() {
+                const form = document.getElementById('voucher-form');
+
+                const voucherInfo = {
+                    name: form.querySelector('[name="name"]').value.trim(),
+                    voucherNo: form.querySelector('[name="voucherNo"]').value.trim(),
+                    dateOfIssue: form.querySelector('[name="dateOfIssue"]').value,
+                    destination: form.querySelector('[name="destination"]').value.trim(),
+                    dateOfTravel: form.querySelector('[name="dateOfTravel"]').value,
+                    hotel: form.querySelector('[name="hotel"]').value.trim(),
+                    hotelConfirmation: form.querySelector('[name="hotelConfirmation"]').value.trim(),
+                    hotelAddress: form.querySelector('[name="hotelAddress"]').value.trim(),
+                    rooms: parseInt(form.querySelector('[name="rooms"]').value, 10) || 0,
+                    namesList: form.querySelector('[name="namesList"]').value.trim()
+                };
+
+                const flightBlocks = flightsContainer.querySelectorAll('.flight-block');
+                const flights = Array.from(flightBlocks).map(block => ({
+                    flightNo: block.querySelector('[name="flightNo"]').value.trim(),
+                    depDate: block.querySelector('[name="depDate"]').value,
+                    depTime: block.querySelector('[name="depTime"]').value,
+                    arrDate: block.querySelector('[name="arrDate"]').value,
+                    arrTime: block.querySelector('[name="arrTime"]').value
+                }));
+
+                const itBlocks = itinerariesContainer.querySelectorAll('.itinerary-block');
+                const itineraries = Array.from(itBlocks).map(block => ({
+                    city: block.querySelector('[name="city"]').value.trim(),
+                    hotel: block.querySelector('[name="itHotel"]').value.trim(),
+                    breakfast: !!block.querySelector('[name="breakfast"]').checked,
+                    lunch: !!block.querySelector('[name="lunch"]').checked,
+                    dinner: !!block.querySelector('[name="dinner"]').checked,
+                    description: block.querySelector('[name="itDesc"]').value.trim()
+                }));
+
+                const scopeOfWork = {
+                    inclusions: form.querySelector('[name="inclusions"]').value.trim(),
+                    exclusions: form.querySelector('[name="exclusions"]').value.trim(),
+                    arrivalInstructions: form.querySelector('[name="arrivalInstructions"]').value.trim(),
+                    remarks: form.querySelector('[name="remarks"]').value.trim()
+                };
+
+                return { voucherInfo, flights, itineraries, scopeOfWork };
+            }
+
+            document.getElementById('voucher-form').onsubmit = async function(e) {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submit-btn');
+                const originalText = submitBtn.textContent;
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Generating...';
+
+                    const payload = extractFormData();
+
+                    const response = await fetch(VOUCHER_API_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.error || `Request failed: ${response.status}`);
+                    }
+
+                    const blob = await response.blob();
+                    const contentDisposition = response.headers.get('Content-Disposition');
+                    const filenameMatch = contentDisposition && contentDisposition.match(/filename=\"?([^\";\\n]+)\"?/);
+                    const filename = filenameMatch ? filenameMatch[1] : `voucher-${payload.voucherInfo.voucherNo || Date.now()}.pdf`;
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    alert('Voucher PDF downloaded successfully!');
+                } catch (err) {
+                    console.error('Voucher submission error:', err);
+                    alert(`Failed to generate voucher: ${err.message}`);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            };
+
+            // Set default dates
+            const today = new Date().toISOString().slice(0,10);
+            document.querySelector('[name="dateOfIssue"]').value = today;
+            document.querySelector('[name="dateOfTravel"]').value = today;
+
+            showPage(1);
+        })();
+    </script>
+</body>
+</html>
