@@ -9,11 +9,17 @@
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "watch:css": "tailwindcss -i ./src/css/input/input.css -o ./src/css/output/output.css --watch"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.2.0",
     "express": "^5.2.1",
     "nodemon": "^3.1.14",
-    "pdfkit": "^0.15.2"
+    "pdfkit": "^0.15.2",
+    "tailwindcss": "^4.2.0"
+  },
+  "devDependencies": {
+    "daisyui": "^5.5.19"
   }
 }

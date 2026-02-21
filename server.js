@@ -11,6 +11,32 @@ const GREY_DARK = '#2C3E50';
 const GREY_MID = '#7F8C8D';
 const GREY_LIGHT = '#ECF0F1';
 
+
+app.get('/pages/:page', (req, res) => {
+  const page = req.params.page;
+  console.log('Requested page:', page);
+  const allowedPages = ['billing-generator', 'voucher-generator'];
+
+  if (page.includes('.')) {
+    return res.status(403).send('Direct file access not allowed');
+  }
+
+  if (!allowedPages.includes(page)) {
+    return res.status(404).send('Page not found');
+  }
+  switch (page) {
+    case 'login':
+      res.sendFile(path.join(__dirname, 'src/pages/index.html'));
+      break;
+    case 'billing-generator':
+      res.sendFile(path.join(__dirname, 'src/pages/billing-generator.html'));
+      break;
+    case 'voucher-generator':
+      res.sendFile(path.join(__dirname, 'src/pages/voucher-generator.html'));
+      break;
+  }
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'src')));
 
@@ -31,6 +57,11 @@ app.post('/api/billing', (req, res) => {
     console.error('Billing PDF error:', err);
     res.status(500).json({ error: err.message || 'Failed to generate PDF' });
   }
+});
+
+
+app.get('/', (req, res) => {
+  res.send('Server is running')
 });
 
 
